@@ -1,0 +1,71 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Custom styling extensions */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: #FFF8F2;
+    color: #2c5499;
+    overflow-x: hidden;
+  }
+}
+
+/* Custom Scrollbar for premium feel */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FFF8F2;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2c5499;
+  border-radius: 5px;
+  border: 2px solid #FFF8F2;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2c5499;
+}
+
+/* Soft pulse for interactive dots */
+@keyframes softPulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+.animate-soft-pulse {
+  animation: softPulse 3s infinite ease-in-out;
+}
+
+/* Text glow for active links */
+.active-link-glow {
+  position: relative;
+}
+
+.active-link-glow::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #2c5499;
+  border-radius: 2px;
+}
