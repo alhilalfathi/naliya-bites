@@ -6,6 +6,15 @@ import variant1 from "../src/images/Partypackbasic2varian.jpeg"
 import variant2 from "../src/images/Partypackspesial2.jpeg"
 import variant3 from "../src/images/Partypackbasic4varian.jpeg"
 import variant4 from "../src/images/Partypackspesiallotus.jpeg"
+import Clasic1 from "../src/images/customee.jpeg"
+import clasic2 from "../src/images/ClassicFudgyBrownie2varian.jpeg"
+import clasic3 from "../src/images/ClassicFudgyBrownie1varian.jpeg"
+import clasic4 from "../src/images/Classic-Fudgy-Brownie-4.jpeg"
+import petite1 from "../src/images/fudgy1.jpeg"
+import petite2 from "../src/images/fudgy2.jpeg"
+import petite3 from "../src/images/fudgy3.jpeg"
+import petite4 from "../src/images/fudgy4.jpeg"
+
 
 
 
@@ -65,7 +74,7 @@ export const CONFIG = {
         },
         {
           name: "Spesial 2 Topping",
-          description: "Kombinasitopping premium pilihan.",
+          description: "Kombinasi topping spesial pilihan.",
           image: variant2,
         },
         {
@@ -93,24 +102,24 @@ export const CONFIG = {
       waMessage: "Halo, saya ingin memesan Classic Fudgy Brownie.",
       variants: [
         {
-          name: "Original Shiny Crust",
-          description: "Tekstur fudgy klasik dengan shiny crust sempurna.",
-          image: "https://images.unsplash.com/photo-1606313564000-0e48f005223d?auto=format&fit=crop&q=80&w=500"
+          name: "Spesial Custome",
+          description: "Topping premium pilihan, tersedia custome sesuai keinginan.",
+          image: Clasic1,
         },
         {
-          name: "Milo Cubes",
-          description: "Milo Cube padat memberikan sensasi kunyahan cokelat padat.",
-          image: "https://images.unsplash.com/photo-1541832676-9b763b0239ab?auto=format&fit=crop&q=80&w=500"
+          name: "Basic Topping 2",
+          description: "Almond dan Butiran Kacang.",
+          image: clasic2,
         },
         {
-          name: "Oreo Crumbs",
-          description: "Remahan dan kepingan biskuit Oreo legendaris yang manis.",
-          image: "https://images.unsplash.com/photo-1559622214-f8a9850965b2?auto=format&fit=crop&q=80&w=500"
+          name: "Basic Topping 1",
+          description: "Almond.",
+          image: clasic3,
         },
         {
-          name: "Matcha Glaze Swirl",
-          description: "Sentuhan saus matcha Jepang beraroma harum.",
-          image: "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&q=80&w=500"
+          name: "Basic-Basic Toping",
+          description: "Topping-Topping Pilihan.",
+          image: clasic4,
         }
       ]
     },
@@ -127,24 +136,24 @@ export const CONFIG = {
       waMessage: "Halo, saya ingin memesan Petite Square Brownies.",
       variants: [
         {
-          name: "Petite Lotus",
-          description: "Topping Lotus Biscoff dalam kemasan mungil.",
-          image: "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?auto=format&fit=crop&q=80&w=500"
+          name: "Petite 1",
+          description: "Topping-Topping Pilihan.",
+          image: petite1
         },
         {
-          name: "Petite Almond",
-          description: "Taburan kacang almond renyah porsi personal.",
-          image: "https://images.unsplash.com/photo-1511381939415-e44015466834?auto=format&fit=crop&q=80&w=500"
+          name: "Petite 2",
+          description: "Topping-Topping Pilihan.",
+          image: petite2
         },
         {
-          name: "Petite Cheese",
-          description: "Keju premium yang pas untuk porsi sekali makan.",
-          image: "https://images.unsplash.com/photo-1552763407-3d179aa24e38?auto=format&fit=crop&q=80&w=500"
+          name: "Petite 3",
+          description: "Topping-Topping Pilihan.",
+          image: petite3
         },
         {
-          name: "Petite Oreo",
-          description: "Mini Oreo renyah di atas base brownies fudgy.",
-          image: "https://images.unsplash.com/photo-1559622214-f8a9850965b2?auto=format&fit=crop&q=80&w=500"
+          name: "Petite 4",
+          description: "Topping-Topping Pilihan.",
+          image: petite4
         }
       ]
     }
@@ -219,12 +228,12 @@ export const CONFIG = {
     {
       id: "faq-1",
       question: "Apakah dibuat setiap hari?",
-      answer: "Ya! Kami menggunakan sistem *made-to-order*. Brownies Anda baru akan dipanggang pada hari pengiriman untuk menjamin kesegaran dan rasa terbaik."
+      answer: "Ya! Karena brownies kami dibuat dengan sistem made-to-order, pemesanan wajib dilakukan maksimal H-1 sebelum hari pengiriman ya."
     },
     {
       id: "faq-2",
       question: "Bisa request topping?",
-      answer: "Tentu saja! Anda bisa memilih 1 hingga 4 topping basic tergantung paket brownies yang dipilih. Anda juga bisa menambahkan Add-on Topping Spesial seperti Strawberry segar, Lotus Biscoff, atau Milo Cubes."
+      answer: "Tentu saja! Anda bisa memilih kombinasi topping basic dan spesial hingga total maksimal 4 topping, tergantung kapasitas menu brownies yang dipilih."
     },
     {
       id: "faq-3",

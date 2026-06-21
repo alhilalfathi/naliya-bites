@@ -16,8 +16,6 @@ export default function Catalog() {
     }).format(value);
   };
 
-  const activeProduct = CONFIG.products.find(p => p.id === activeModalProductId);
-
   // Get the max number of basic toppings allowed for the active product
   const getMaxBasicToppings = (product) => {
     if (!product) return 1;
@@ -27,60 +25,75 @@ export default function Catalog() {
     return 1;
   };
 
-  // Build dynamic WhatsApp message including chosen toppings
+  const activeProduct = CONFIG.products.find(p => p.id === activeModalProductId);
+  const maxToppingsLimit = activeProduct ? getMaxBasicToppings(activeProduct) : 0;
+  const totalSelectedCount = selectedBasicToppings.length + selectedSpecialToppings.length;
+  const isLimitReached = totalSelectedCount >= maxToppingsLimit;
+
+  // Build dynamic WhatsApp message including chosen toppings (Safe Unicode Version)
   const buildWaMessage = (product, basicToppings, specialToppings) => {
+    // \u{1F370} = 🍰, \u{1F36B} = 🍫, \u{1F353} = 🍓, \u{1F4B0} = 💰, \u{1F64F} = 🙏
     let msg = `Halo Naliya Bites! 🩵\nSaya ingin memesan *${product.name}*.\n`;
 
     if (basicToppings.length > 0) {
-      msg += `\n🍫 *Topping Basic:*\n`;
+      msg += '\n' + '\u{1F370}' + '*Topping Basic:*\n';
       basicToppings.forEach((t, i) => {
-        msg += `   ${i + 1}. ${t}\n`;
+        msg += `${i + 1}. ${t}\n`;
       });
     } else {
-      msg += `\n🍫 *Topping Basic:* Belum dipilih (mohon diskusikan)\n`;
+      msg += '\n' + '\u{1F36B}' + ' *Topping Basic:* Belum dipilih (mohon diskusikan)\n';
     }
 
     if (specialToppings.length > 0) {
-      msg += `\n🍫🍓 *Add-On Topping Spesial:*\n`;
+      msg += `\n\u{1F36B}\u{1F353} *Add-On Topping Spesial:*\n`;
       specialToppings.forEach((t, i) => {
-        msg += `   ${i + 1}. ${t} (+${formatPrice(product.addOnPrice)})\n`;
+        msg += `${i + 1}. ${t} (+${formatPrice(product.addOnPrice)})\n`;
       });
     }
 
     const addOnTotal = specialToppings.length * product.addOnPrice;
     const total = product.price + addOnTotal;
 
-    msg += `\n💰 *Estimasi Harga:*\n`;
-    msg += `   • Harga dasar ${product.name}: ${formatPrice(product.price)}\n`;
+    msg += `\n\u{1F4B0} *Estimasi Harga:*\n`;
+    msg += `• Harga dasar ${product.name}: ${formatPrice(product.price)}\n`;
     if (specialToppings.length > 0) {
-      msg += `   • Add-on Topping Spesial (${specialToppings.length}×${formatPrice(product.addOnPrice)}): +${formatPrice(addOnTotal)}\n`;
+      msg += `• Add-on Topping Spesial (${specialToppings.length}×${formatPrice(product.addOnPrice)}): +${formatPrice(addOnTotal)}\n`;
     }
-    msg += `   • *Total Estimasi: ${formatPrice(total)}*\n`;
-    msg += `   _(Belum termasuk ongkos kirim)_\n`;
-    msg += `\nMohon konfirmasi ketersediaan dan waktu pengiriman ya. Terima kasih! 🙏`;
+    msg += `• *Total Estimasi: ${formatPrice(total)}*\n`;
+    msg += `_(Belum termasuk ongkos kirim)_\n`;
+    msg += `\nMohon konfirmasi ketersediaan dan waktu pengiriman ya. Terima kasih! \u{1F64F}`;
+
     return msg;
   };
 
-  // Toggle basic topping selection (respects max limit)
+  // Toggle basic topping selection (respects combined max limit)
   const toggleBasicTopping = (topping) => {
     const max = getMaxBasicToppings(activeProduct);
     setSelectedBasicToppings(prev => {
       if (prev.includes(topping)) {
         return prev.filter(t => t !== topping);
       }
-      if (prev.length >= max) {
-        // Replace oldest selection if at max
-        return [...prev.slice(1), topping];
+      const totalSelected = prev.length + selectedSpecialToppings.length;
+      if (totalSelected >= max) {
+        return prev;
       }
       return [...prev, topping];
     });
   };
 
-  // Toggle special topping selection
+  // Toggle special topping selection (respects combined max limit)
   const toggleSpecialTopping = (topping) => {
-    setSelectedSpecialToppings(prev =>
-      prev.includes(topping) ? prev.filter(t => t !== topping) : [...prev, topping]
-    );
+    const max = getMaxBasicToppings(activeProduct);
+    setSelectedSpecialToppings(prev => {
+      if (prev.includes(topping)) {
+        return prev.filter(t => t !== topping);
+      }
+      const totalSelected = selectedBasicToppings.length + prev.length;
+      if (totalSelected >= max) {
+        return prev;
+      }
+      return [...prev, topping];
+    });
   };
 
   // Reset topping selections when modal changes
@@ -337,9 +350,14 @@ export default function Catalog() {
 
                 {/* ── TOPPING SELECTION SECTION ── */}
                 <div className="bg-secondary/40 rounded-2xl p-5 sm:p-6 border border-primary/10 space-y-6 mb-6">
-                  <h4 className="font-serif text-base sm:text-lg font-bold text-cocoa-900 flex items-center gap-2">
-                    🍫 Pilih Topping Untuk Pesananmu
-                  </h4>
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-primary/10 pb-3">
+                    <h4 className="font-serif text-base sm:text-lg font-bold text-cocoa-900 flex items-center gap-2">
+                      🍫 Pilih Topping Untuk Pesananmu
+                    </h4>
+                    <span className="text-xs text-primary font-bold bg-primary/10 px-3 py-1.5 rounded-full self-start sm:self-auto">
+                      Total Topping: {totalSelectedCount} / {maxToppingsLimit} dipilih
+                    </span>
+                  </div>
 
                   {/* Basic Toppings */}
                   <div>
@@ -347,19 +365,20 @@ export default function Catalog() {
                       <p className="text-sm font-semibold text-cocoa-800">
                         Topping Basic <span className="text-cocoa-500 font-normal">({activeProduct.toppingsBasicLimit})</span>
                       </p>
-                      <span className="text-xs text-primary font-bold bg-primary/10 px-2.5 py-1 rounded-full">
-                        {selectedBasicToppings.length} / {getMaxBasicToppings(activeProduct)} dipilih
-                      </span>
                     </div>
                     <div className="flex flex-wrap gap-2">
                       {CONFIG.toppings.basic.map((topping, idx) => {
                         const isSelected = selectedBasicToppings.includes(topping);
+                        const isDisabled = !isSelected && isLimitReached;
                         return (
                           <button
                             key={idx}
-                            onClick={() => toggleBasicTopping(topping)}
+                            onClick={() => !isDisabled && toggleBasicTopping(topping)}
+                            disabled={isDisabled}
                             className={`px-4 py-2 rounded-2xl text-sm font-semibold border transition-all duration-200 cursor-pointer ${isSelected
-                                ? 'bg-primary text-secondary border-primary shadow-md scale-105'
+                              ? 'bg-primary text-secondary border-primary shadow-md scale-105'
+                              : isDisabled
+                                ? 'bg-cocoa-100 text-cocoa-500 border-cocoa-100 opacity-50 cursor-not-allowed'
                                 : 'bg-white text-cocoa-800 border-primary/20 hover:border-primary/50 hover:bg-primary/5'
                               }`}
                           >
@@ -381,12 +400,16 @@ export default function Catalog() {
                     <div className="flex flex-wrap gap-2">
                       {CONFIG.toppings.special.map((topping, idx) => {
                         const isSelected = selectedSpecialToppings.includes(topping.name);
+                        const isDisabled = !isSelected && isLimitReached;
                         return (
                           <button
                             key={idx}
-                            onClick={() => toggleSpecialTopping(topping.name)}
+                            onClick={() => !isDisabled && toggleSpecialTopping(topping.name)}
+                            disabled={isDisabled}
                             className={`px-4 py-2 rounded-2xl text-sm font-semibold border transition-all duration-200 cursor-pointer flex items-center gap-1.5 ${isSelected
-                                ? 'bg-accent text-white border-accent shadow-md scale-105'
+                              ? 'bg-accent text-white border-accent shadow-md scale-105'
+                              : isDisabled
+                                ? 'bg-cocoa-100 text-cocoa-500 border-cocoa-100 opacity-50 cursor-not-allowed'
                                 : 'bg-white text-cocoa-800 border-accent/30 hover:border-accent/60 hover:bg-accent/5'
                               }`}
                           >
@@ -476,7 +499,7 @@ export default function Catalog() {
                       Tutup
                     </button>
                     <a
-                      href={`https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(
+                      href={`https://api.whatsapp.com/send?phone=${CONFIG.whatsappNumber}&text=${encodeURIComponent(
                         buildWaMessage(activeProduct, selectedBasicToppings, selectedSpecialToppings)
                       )}`}
                       target="_blank"

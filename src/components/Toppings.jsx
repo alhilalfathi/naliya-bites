@@ -77,7 +77,7 @@ export default function Toppings() {
             </motion.div>
             
             <p className="text-xs text-cocoa-400 font-light italic mt-auto">
-              * Bebas pilih topping basic sesuai batas maksimal masing-masing menu brownies.
+              * Bebas pilih kombinasi topping basic dan spesial sesuai batas maksimal masing-masing menu (maksimal 4 topping).
             </p>
           </motion.div>
 
